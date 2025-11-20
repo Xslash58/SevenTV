@@ -4,6 +4,7 @@
 	"license": "Apache-2.0 with Commons Clause",
 	"scripts": {
 		"dev": "pnpm run codegen && vite dev --port 4173",
+		"devp": "pnpm run codegen && vite dev --host --port 3000",
 		"build": "pnpm run codegen && pnpm run svelte:check && vite build",
 		"preview": "vite preview --port 4173",
 		"lint": "pnpm run codegen && eslint . && pnpm run svelte:check && prettier --check \"**/*\" -u",

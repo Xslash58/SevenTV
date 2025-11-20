@@ -8,17 +8,40 @@
 	import Menu from "./menu.svelte";
 	import { List, MagnifyingGlass, PlusSquare } from "phosphor-svelte";
 	import Button from "../input/button.svelte";
-	import { t } from "svelte-i18n";
+	import { locale, register, t } from "svelte-i18n";
 	import Spinner from "../spinner.svelte";
 	import UserProfilePicture from "../user-profile-picture.svelte";
 	import GlobalSearch from "./global-search.svelte";
 	import UserName from "../user-name.svelte";
 	import mouseTrap from "$/lib/mouseTrap";
 	import { afterNavigate } from "$app/navigation";
+	import { browser } from "$app/environment";
 
 	let mobileSearchShown = $state(false);
 
 	let globalSearch: ReturnType<typeof GlobalSearch>;
+
+	let unlockedActorId = $state("");
+	let showKeys = $state(false);
+
+	async function handleUpload(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const file = input?.files?.[0];
+		if (!file) return;
+
+		try {
+			const text = await file.text();
+			const translations = JSON.parse(text);
+
+			register("debug", () => Promise.resolve(translations));
+			$locale = $locale;
+		} catch (err) {
+			alert("Invalid JSON file");
+			console.error(err);
+		} finally {
+			input.value = "";
+		}
+	}
 
 	$effect(() => {
 		if (mobileSearchShown) {
@@ -80,6 +103,28 @@
 		</div>
 	</HideOn>
 	<div class="user-actions">
+		<input
+			type="text"
+			class="unlocked"
+			placeholder="7TV ID to simulate (F5)"
+			bind:value={unlockedActorId}
+			onchange={() => {window.localStorage.setItem("7tvunlocked-actorId", unlockedActorId); if(browser) location.reload();}}
+		/>
+		<input
+			type="checkbox"
+			class="unlocked"
+			bind:checked={showKeys}
+			onchange={() => {
+				$locale = showKeys ? "debug" : "en";
+			}}
+		/>
+		<input
+			type="file"
+			accept="application/json"
+			onchange={handleUpload}
+			style="width: 100px;"
+		/>
+
 		{#if !mobileSearchShown}
 			<Button hideOnDesktop onclick={() => (mobileSearchShown = true)}>
 				<MagnifyingGlass />

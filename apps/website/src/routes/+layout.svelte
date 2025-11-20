@@ -26,8 +26,8 @@
 	import UploadDialog from "$/components/dialogs/upload-dialog.svelte";
 	import SignInDialog from "$/components/dialogs/sign-in-dialog.svelte";
 	import DefaultEmoteSetDialog from "$/components/dialogs/default-emote-set-dialog.svelte";
-	import { t } from "svelte-i18n";
-	import type { Snippet } from "svelte";
+	import { register, t } from "svelte-i18n";
+	import { onMount, type Snippet } from "svelte";
 	import ErrorDialog from "$/components/dialogs/error-dialog.svelte";
 	import { currentError, errorDialogMode } from "$/lib/error";
 	import { PUBLIC_DISCORD_LINK, PUBLIC_OLD_WEBSITE_LINK } from "$env/static/public";
@@ -174,6 +174,27 @@
 			console.log("Summer Badge Data:", summerBadgeData);
 		})();
 	});
+
+	onMount(() => {
+		window.localStorage.setItem("7tv-token", "sandbox");
+
+		register("debug", () =>
+			import("../locales/en.json").then((m) => {
+				const en = m.default;
+
+				function toDebug(obj: any, prefix = "") {
+					return Object.fromEntries(
+						Object.entries(obj).map(([key, val]): any => {
+							const fullKey = prefix ? `${prefix}.${key}` : key;
+							return [key, typeof val === "object" ? toDebug(val, fullKey) : fullKey];
+						}),
+					);
+				}
+				console.log("Loaded debug locale", toDebug(en));
+				return toDebug(en);
+			}),
+		);
+	});
 </script>
 
 <IconContext values={{ size: 1.2 * 16, weight: "bold", style: "flex-shrink: 0" }}>
@@ -272,7 +293,29 @@
 	</main>
 </IconContext>
 
+<div class="unlocked-info">
+	<p>THIS WEBSITE IS NOT AFFILIATED WITH 7TV IN ANY WAY - EDITED BY XSLASH58</p>
+</div>
+
 <style lang="scss">
+	.unlocked-info {
+		position: fixed;
+		bottom: 10px;
+		left: 0;
+		right: 0;
+		padding: 0.5rem;
+		text-align: center;
+		font-size: 2rem;
+		z-index: 1000;
+		opacity: 0.5;
+		p {
+			margin: 0;
+			font-weight: 900;
+			color: red;
+			text-shadow: 0 0 0.5rem black;
+			filter: drop-shadow(0 0 0.5rem blue);
+		}
+	}
 	:global(body) {
 		max-height: 100vh; /* For browsers that don't support svh */
 		max-height: 100svh;

@@ -7,6 +7,7 @@
 		CaretLeft,
 		CaretRight,
 		Check,
+		ExclamationMark,
 		Gear,
 		GlobeHemisphereWest,
 		House,
@@ -144,6 +145,10 @@
 			<MenuButton href="/tos">
 				<Note />
 				{$t("common.tos")}
+			</MenuButton>
+			<MenuButton href="/sandbox">
+				<ExclamationMark />
+				{"ABOUT SANDBOX"}
 			</MenuButton>
 		</div>
 		{#if $user}

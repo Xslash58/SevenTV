@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Dialog, { type DialogMode } from "./dialog.svelte";
 	import Checkbox from "$/components/input/checkbox.svelte";
-	import { Moon, Sun, Trash, UploadSimple } from "phosphor-svelte";
+	import { Moon, Sun, Trash, UploadSimple, User } from "phosphor-svelte";
 	import { theme, type Theme } from "$/lib/layout";
 	import TagsInput from "../input/tags-input.svelte";
 	import Button from "../input/button.svelte";
@@ -272,12 +272,12 @@
 				<TagsInput bind:tags>
 					<span class="label">{$t("labels.tags")}</span>
 				</TagsInput>
-				<!-- <TextInput placeholder={$t("labels.search_users", { values: { count: 2 } })}>
+				<TextInput placeholder={$t("labels.search_users", { values: { count: 2 } })}>
 					<span class="label">{$t("labels.emote_attribution")}</span>
 					{#snippet icon()}
 						<User />
 					{/snippet}
-				</TextInput> -->
+				</TextInput>
 				<Checkbox bind:value={zeroWidth}>{$t("flags.overlaying")}</Checkbox>
 				<Checkbox bind:value={privateFlag}>Private</Checkbox>
 			</div>

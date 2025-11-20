@@ -8,8 +8,14 @@
 	}
 
 	let { mode = $bindable("hidden"), error = "An error occured" }: Props = $props();
+
+	if(error.includes("LOGIN_REQUIRED"))
+	{
+		error = "Sandbox users can only view this website, not interact with it. Please visit official 7tv.app website";
+	}
 </script>
 
+{#if !error.includes("LACKING_PRIVILEGES")}
 <Dialog width={30} bind:mode>
 	<div class="layout">
 		<h1>{$t("dialogs.error.title")}</h1>
@@ -17,6 +23,7 @@
 		<p>{error}</p>
 	</div>
 </Dialog>
+{/if}
 
 <style lang="scss">
 	.layout {
@@ -25,6 +32,9 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+
+		color: lime;
+		font-weight: bold;
 	}
 
 	h1 {

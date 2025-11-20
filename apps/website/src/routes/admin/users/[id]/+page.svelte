@@ -12,7 +12,7 @@
 	import { PUBLIC_SUBSCRIPTION_PRODUCT_ID } from "$env/static/public";
 	import { CaretLeft } from "phosphor-svelte";
 	import UserName from "$/components/user-name.svelte";
-	import { user } from "$/lib/auth";
+	import { createSandboxUser, user } from "$/lib/auth";
 	import AdminCreateSessionDialog from "$/components/dialogs/admin-create-session-dialog.svelte";
 	import type { DialogMode } from "$/components/dialogs/dialog.svelte";
 	import AdminLinkKickDialog from "$/components/dialogs/admin-link-kick-dialog.svelte";
@@ -27,6 +27,8 @@
 	let uuid = $derived(Uuid.fromRawTrusted(parsedId.toRaw()).toCanonical());
 
 	async function queryUser(id: string, showAllPeriods: boolean) {
+		return createSandboxUser();
+		
 		const res = await gqlClient().query(
 			graphql(`
 				query AdminGetUser($id: Id!, $productId: Id!, $showAllPeriods: Boolean!) {
